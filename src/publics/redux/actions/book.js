@@ -7,9 +7,9 @@ export const getBooks = () => {
     }
 }
 
-export const postBook = (title, image, description) => {
+export const postBook = (title, writer, image, description, locationid, categoryid, statusid) => {
     return {
         type: 'POST_BOOK',
-        payload: axios.post('http://localhost:2000/books', { title: title, image: image, description: description })
+        payload: axios.post('http://localhost:2000/books', { title: title, writer: writer, image: image, description: description, locationid: locationid, categoryid: categoryid, statusid: statusid })
     }
 }

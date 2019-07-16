@@ -27,6 +27,24 @@ const book = (state = initialState, action) => {
                 isFulFilled: true,
                 bookList: action.payload.data
             }
+        case 'POST_BOOK_PENDING': // in case when loading post data
+            return {
+                ...state,
+                isLoading: true
+            }
+        case 'POST_BOOK_REJECTED': // in case error network/else
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+            }
+        case 'POST_BOOK_FULFILLED': // in case successfuly post data
+            return {
+                ...state,
+                isLoading: false,
+                isFinish: true,
+                bookList: [...state.bookList, action.payload.data[0]],
+            }
         default:
             return state
     }
