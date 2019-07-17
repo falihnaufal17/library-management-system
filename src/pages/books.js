@@ -6,7 +6,6 @@ import Navbar from '../components/navbar';
 import ModalForm from '../components/modal';
 import { Link } from 'react-router-dom';
 
-import dataBook from '../data/books';
 class Books extends Component {
     constructor(props) {
         super(props);

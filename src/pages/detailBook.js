@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Modal, Form, Col, Row, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { detailBook, deleteBook } from '../publics/redux/actions/book';
+
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
-
-import dataBooks from '../data/books';
 
 class DetailBook extends Component {
     constructor(props) {
@@ -12,54 +12,36 @@ class DetailBook extends Component {
         this.state = {
             modalDeleteShow: false,
             modalEditShow: false,
-            data: dataBooks
+            books: [],
         };
+    }
 
+    componentDidMount = async () => {
+        await this.props.dispatch(detailBook(this.props.match.params.bookid))
+        this.setState({
+            books: this.props.book
+        })
+    }
 
+    deleteBook = async () => {
+
+        await this.props.dispatch(deleteBook(this.props.match.params.bookid))
+        this.setState({
+            books: this.props.book
+        })
+        Swal.fire({
+            type: 'success',
+            title: 'Berhasil menghapus',
+            text: `Data berhasil dihapus`
+        })
     }
 
     render() {
-        let modalClose = () => this.setState({
-            modalDeleteShow: false,
-            modalEditShow: false
-        });
-        let bookid = Number(this.props.match.params.bookid);
-        let data = dataBooks.find((item) => item.bookid === bookid);
-        function deleteBook() {
-            let dataIndex = dataBooks.indexOf(data)
-            dataBooks.splice(dataIndex, 1)
 
-            Swal.fire({
-                type: 'success',
-                title: 'Berhasil menghapus',
-                text: `Data ${data.name} berhasil dihapus`
-            })
-        }
+        const { books } = this.state
 
-        const cover = {
-            position: 'absolute',
-            width: '100%',
-            height: '454px',
-            left: '0px',
-            top: '0px',
-
-            backgroundImage: `url(${data.img})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover'
-        }
-
-        const coverMini = {
-            position: 'absolute',
-            width: '200px',
-            height: '288.81px',
-            left: '1100px',
-            top: '253px',
-
-            background: `url(${data.img})`,
-            boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.25)',
-            borderRadius: '15px',
-            backgroundSize: 'cover'
-        }
+        const list = books.bookList
+        console.log(list)
 
         const titleBook = {
             position: 'absolute',
@@ -152,139 +134,64 @@ class DetailBook extends Component {
             return `${day} ${month} ${year}`
         }
 
+        console.log(typeof list)
 
         return (
-            <div style={cover}>
-                <div
-                    style={btnEdit}
-                    onClick={() => this.setState({ modalEditShow: true })}
-                >Edit</div>
+            <div>
+                <div style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '454px',
+                    left: '0px',
+                    top: '0px',
 
-                <ModalEdit
-                    show={this.state.modalEditShow}
-                    onHide={modalClose}
-                    data={data}
-                />
-                <Link to="/">
+                    backgroundImage: `url(${list ? list.image : ''})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover'
+                }}>
                     <div
-                        style={btnDelete}
-                        onClick={() => {
-                            deleteBook()
-                        }}
-                    >Delete</div>
-                </Link>
+                        style={btnEdit}
+                        onClick={() => this.setState({ modalEditShow: true })}
+                    >Edit</div>
 
-                {/* <ModalDelete
-                    show={this.state.modalDeleteShow}
-                    onHide={modalClose}
-                    data={data}
-                /> */}
+                    <Link to={'/'} onClick={this.deleteBook.bind(this)}>
+                        <div
 
-                <div style={coverMini}></div>
-                <div>
-                    <h1 style={titleBook}>{data.name}</h1>
-                    <p style={date}>{formatDate(data.updated_at)}</p>
-                </div>
-                <div>
-                    <p style={description}>
-                        {data.description}
-                    </p>
+                            style={btnDelete}
+                        >Delete</div>
+                    </Link>
+
+                    <div style={{
+                        position: 'absolute',
+                        width: '200px',
+                        height: '288.81px',
+                        left: '1100px',
+                        top: '253px',
+
+                        background: `url(${list ? list.image : ''})`,
+                        boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.25)',
+                        borderRadius: '15px',
+                        backgroundSize: 'cover'
+                    }} />
+
+                    <div>
+                        <h1 style={titleBook}>{list ? list.title : ''}</h1>
+                        <p style={date}>{formatDate(list ? list.updated_at : '')}</p>
+                    </div>
+                    <div>
+                        <p style={description}>
+                            {list ? list.description : ''}
+                        </p>
+                    </div>
                 </div>
             </div>
         )
     }
 }
-export class ModalDelete extends Component {
-    render() {
-        return (
-            <Modal
-                {...this.props}
-                size="md"
-                centered
-            >
-                <Modal.Header closeButton>
-                </Modal.Header>
-                <Modal.Body>
-                    <img src={require('../assets/img/checklist.png')} style={{ width: '150px', height: '150px', alignItems: 'center', marginLeft: 160, padding: 0 }} />
-                    <p style={{
-                        textAlign: 'center',
-                        fontFamily: 'Open Sans',
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: '25px',
-                        lineHeight: '48px',
 
-                        color: '#000000',
-
-                    }}>Data {this.props.data.name} berhasil dihapus !</p>
-                </Modal.Body>
-            </Modal>
-        )
-    }
-}
-
-
-export class ModalEdit extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            book: dataBooks,
-            img: props.data.img,
-            name: props.data.name,
-            description: props.data.description,
-            updated_at: new Date()
-        }
-    }
-
-    updateBook = () => {
-
-        alert('Update data successfully')
-    }
-
-    render() {
-        return (
-            <Modal
-                {...this.props}
-                size="lg"
-                aria-labelledby="contained-title-vcenter"
-                centered>
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-title-vcenter">
-                        Edit Data
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group as={Row} controlId="formUrlImage">
-                            <Form.Label column sm="2">Url Image</Form.Label>
-                            <Col sm="10">
-                                <Form.Control placeholder="Url Image..." value={this.state.img} onChange={(e) => this.setState({ img: e.target.value })} />
-                            </Col>
-                        </Form.Group>
-
-                        <Form.Group controlId="formTitle" as={Row}>
-                            <Form.Label column sm="2">Title</Form.Label>
-                            <Col sm="10">
-                                <Form.Control placeholder="Title..." value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group controlId="formDescription" as={Row}>
-                            <Form.Label column sm="2">Description</Form.Label>
-                            <Col sm="10">
-                                <Form.Control as="textarea" rows="3" placeholder="Description..." value={this.state.description} onChange={(e) => this.setState({ description: e.target.value })} />
-                            </Col>
-                        </Form.Group>
-                        <Button style={{
-                            backgroundColor: '#F4CF5D', float: 'right', border: 'none', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)', width: '90px',
-                            height: '40px',
-                        }} onClick={this.updateBook.bind(this)}>
-                            Save
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        )
-    }
-}
-export default DetailBook;
+const mapStateToProps = state => {
+    return {
+        book: state.book,
+    };
+};
+export default connect(mapStateToProps)(DetailBook);

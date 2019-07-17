@@ -47,6 +47,66 @@ const book = (state = initialState, action) => {
                 isFulFilled: true,
                 bookList: [state.bookList, action.payload.data[0]],
             }
+        case 'DETAIL_BOOK_PENDING': // in case when loading post data
+            return {
+                ...state,
+                isLoading: true,
+                isFulFilled: false,
+                isRejected: false
+            }
+        case 'DETAIL_BOOK_REJECTED': // in case error network/else
+            return {
+                ...state,
+                isLoading: false,
+                isRejected: true,
+            }
+        case 'DETAIL_BOOK_FULFILLED': // in case successfuly post data
+            return {
+                ...state,
+                isLoading: false,
+                isFulFilled: true,
+                bookList: action.payload.data.result,
+            }
+        case 'DELETE_BOOK_PENDING': // in case when loading post data
+            return {
+                ...state,
+                isLoading: true,
+                isFulFilled: false,
+                isRejected: false
+            }
+        case 'DELETE_BOOK_REJECTED': // in case error network/else
+            return {
+                ...state,
+                isLoading: false,
+                isRejected: true,
+            }
+        case 'DELETE_BOOK_FULFILLED': // in case successfuly post data
+            return {
+                ...state,
+                isLoading: false,
+                isFulFilled: true,
+                bookList: [state.bookList, action.payload.data[0]],
+            }
+        case 'UPDATE_BOOK_PENDING': // in case when loading post data
+            return {
+                ...state,
+                isLoading: true,
+                isFulFilled: false,
+                isRejected: false
+            }
+        case 'UPDATE_BOOK_REJECTED': // in case error network/else
+            return {
+                ...state,
+                isLoading: false,
+                isRejected: true,
+            }
+        case 'UPDATE_BOOK_FULFILLED': // in case successfuly post data
+            return {
+                ...state,
+                isLoading: false,
+                isFulFilled: true,
+                bookList: [state.bookList, action.payload.data[0]],
+            }
         default:
             return state
     }

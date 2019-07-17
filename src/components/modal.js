@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Modal, Form, Button, Col, Row, FormControl } from 'react-bootstrap';
+import { Modal, Form, Button, Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 
 import { getCategories } from '../publics/redux/actions/category'
-import { postBook } from '../publics/redux/actions/book'
+import { postBook, getBooks } from '../publics/redux/actions/book'
 import { getLocation } from '../publics/redux/actions/location';
 import { getStatus } from '../publics/redux/actions/status';
-
-import book from '../data/books';
 
 import swal from 'sweetalert2'
 class ModalForm extends Component {
@@ -72,7 +69,7 @@ class ModalForm extends Component {
     }
 
     render() {
-        const { title, writer, image, description, locationid, categoryid, statusid, categories, locations, statuss, setShow, show } = this.state
+        const { title, writer, image, description, locationid, categoryid, statusid, categories, locations, statuss } = this.state
         const cat = categories.categoryList
         const loc = locations.locationList
         const stat = statuss.statusList
