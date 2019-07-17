@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class Navbar extends Component {
     render() {
@@ -25,9 +26,25 @@ class Navbar extends Component {
 
             color: '#000000',
         }
+
+        const navigation = {
+            float: 'right',
+            marginRight: '40px',
+            fontFamily: 'Open Sans',
+            fontStyle: 'normal',
+            fontSize: '25px',
+            lineHeight: '68px',
+
+            color: '#000000',
+        }
         return (
             <div style={titleBar} >
-                <h6 style={title}>BOOKS</h6>
+                <Link to={'/'}>
+                    <h6 style={title}>BOOKS</h6>
+                </Link>
+                <Link to={'/loaning'}>
+                    <span style={navigation}>Loan List</span>
+                </Link>
             </div>
         );
     }

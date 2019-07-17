@@ -124,7 +124,7 @@ class ModalForm extends Component {
                                     {
                                         loc && loc.result.length > 0 && loc.result.map((item, key) => {
                                             return (
-                                                <option value={item.locationid}>{item.location}</option>
+                                                <option key={key} value={item.locationid}>{item.location}</option>
                                             )
                                         })
                                     }
@@ -139,7 +139,7 @@ class ModalForm extends Component {
                                     {
                                         cat && cat.result.length > 0 && cat.result.map((item, key) => {
                                             return (
-                                                <option value={item.categoryid}>{item.category}</option>
+                                                <option key={key} value={item.categoryid}>{item.category}</option>
                                             )
                                         })
                                     }
@@ -154,7 +154,7 @@ class ModalForm extends Component {
                                     {
                                         stat && stat.result.length > 0 && stat.result.map((item, key) => {
                                             return (
-                                                <option value={item.statusid}>{item.status}</option>
+                                                <option key={key} value={item.statusid}>{item.status}</option>
                                             )
                                         })
                                     }

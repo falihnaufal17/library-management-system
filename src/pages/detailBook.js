@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { detailBook, deleteBook } from '../publics/redux/actions/book';
+import { detailBook, deleteBook, updateBook } from '../publics/redux/actions/book';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import ModalLoaning from '../components/modalLoaning'
 
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
@@ -12,6 +14,7 @@ class DetailBook extends Component {
         this.state = {
             modalDeleteShow: false,
             modalEditShow: false,
+            modalLoanShow: false,
             books: [],
         };
     }
@@ -35,6 +38,10 @@ class DetailBook extends Component {
             text: `Data berhasil dihapus`
         })
     }
+
+    // updateBook = async () =>{
+    //     await
+    // }
 
     render() {
 
@@ -87,6 +94,8 @@ class DetailBook extends Component {
             fontWeight: 'normal',
             fontSize: '20px',
             lineHeight: '27px',
+            textIndent: '1.5em',
+            textAlign: 'justify',
 
             color: '#000000',
         }
@@ -134,8 +143,22 @@ class DetailBook extends Component {
             return `${day} ${month} ${year}`
         }
 
+        function text(text) {
+            if (text.length > 34) {
+                let textSplit = text.substr(0, 30)
+                return `${textSplit} \n`
+            } else {
+                let textSplit = text
+                return `${textSplit}`
+            }
+        }
+
         console.log(typeof list)
 
+        let modalClose = () => this.setState({
+            modalEditShow: false,
+            modalLoanShow: false,
+        });
         return (
             <div>
                 <div style={{
@@ -171,12 +194,85 @@ class DetailBook extends Component {
                         background: `url(${list ? list.image : ''})`,
                         boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.25)',
                         borderRadius: '15px',
+                        backgroundRepeat: 'no-repeat',
                         backgroundSize: 'cover'
-                    }} />
+                    }}></div>
 
                     <div>
-                        <h1 style={titleBook}>{list ? list.title : ''}</h1>
+                        <h1 style={titleBook}>{text(list ? list.title : '')}</h1>
                         <p style={date}>{formatDate(list ? list.updated_at : '')}</p>
+
+                        <p className="badge badge-primary"
+                            style={{
+                                position: 'absolute',
+                                width: 'auto',
+                                height: 'auto',
+                                left: '109px',
+                                top: '580px',
+
+                                fontFamily: 'Open Sans',
+                                fontStyle: 'normal',
+                                fontSize: '14px',
+                                lineHeight: '27px',
+
+                                color: '#ffffff',
+                            }}>{list ? list.category : ''}</p>
+
+                        <p className="badge badge-secondary"
+                            style={{
+                                position: 'absolute',
+                                width: 'auto',
+                                height: 'auto',
+                                left: '205px',
+                                top: '580px',
+
+                                fontFamily: 'Open Sans',
+                                fontStyle: 'normal',
+                                fontSize: '14px',
+                                lineHeight: '27px',
+
+                                color: '#ffffff',
+                            }}>{list ? list.location : ''}</p>
+
+                        <p className="badge badge-success"
+                            style={{
+                                position: 'absolute',
+                                width: 'auto',
+                                height: 'auto',
+                                left: '290px',
+                                top: '580px',
+
+                                fontFamily: 'Open Sans',
+                                fontStyle: 'normal',
+                                fontSize: '14px',
+                                lineHeight: '27px',
+
+                                color: '#ffffff',
+                            }}>{list ? list.status : ''}</p>
+
+                        <button
+                            className="btn btn-outline-success btn-sm"
+                            style={{
+                                position: 'absolute',
+                                width: 'auto',
+                                height: 'auto',
+                                left: '865px',
+                                top: '575px',
+
+                                fontFamily: 'Open Sans',
+                                fontStyle: 'normal',
+                                fontSize: '14px',
+                                lineHeight: '27px',
+                            }}
+                            onClick={() => {
+                                this.setState({ modalLoanShow: true })
+                            }}>
+                            Pinjam
+                        </button>
+                        <ModalLoaning
+                            show={this.state.modalLoanShow}
+                            onHide={modalClose}
+                        />
                     </div>
                     <div>
                         <p style={description}>
