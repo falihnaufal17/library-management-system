@@ -266,12 +266,13 @@ class DetailBook extends Component {
                             }}
                             onClick={() => {
                                 this.setState({ modalLoanShow: true })
-                            }}>
+                            }} disabled={list ? list.status = 'Tidak Tersedia' : ''}>
                             Pinjam
                         </button>
                         <ModalLoaning
                             show={this.state.modalLoanShow}
                             onHide={modalClose}
+                            data={list}
                         />
                     </div>
                     <div>
