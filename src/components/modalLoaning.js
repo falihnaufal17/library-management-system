@@ -35,7 +35,7 @@ class ModalLoaning extends Component {
         await swal.fire({
             title: 'Add loans',
             type: 'success',
-            text: 'Data added successfuly!'
+            text: 'Data added successfully!'
         })
 
         this.setState({
@@ -94,14 +94,14 @@ class ModalLoaning extends Component {
                         <Form.Group controlId="formWriter" as={Row}>
                             <Form.Label column sm="2">ID Card</Form.Label>
                             <Col sm="10">
-                                <Form.Control name="id_card" placeholder="Writer..." onChange={this.handleInputChange} value={id_card} />
+                                <Form.Control name="id_card" placeholder="Id Card..." onChange={this.handleInputChange} value={id_card} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row} controlId="formUrlImage">
                             <Form.Label column sm="2">Name</Form.Label>
                             <Col sm="10">
-                                <Form.Control name="name" placeholder="Url Image..." onChange={this.handleInputChange} value={name} />
+                                <Form.Control name="name" placeholder="Name..." onChange={this.handleInputChange} value={name} />
                             </Col>
                         </Form.Group>
 

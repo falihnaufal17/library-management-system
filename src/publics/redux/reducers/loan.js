@@ -47,6 +47,26 @@ const loan = (state = initializeState, action) => {
                 isFulFilled: true,
                 loanList: [state.loanList, action.payload.data[0]]
             }
+        case 'UPDATE_LOAN_PENDING':
+            return {
+                ...state,
+                isLoading: true,
+                isRejected: false,
+                isFulFilled: false
+            }
+        case 'UPDATE_LOAN_REJECTED':
+            return {
+                ...state,
+                isLoading: false,
+                isRejected: true
+            }
+        case 'UPDATE_LOAN_FULFILLED':
+            return {
+                ...state,
+                isLoading: false,
+                isFulFilled: true,
+                loanList: [state.loanList, action.payload.data[0]]
+            }
         default:
             return state
     }

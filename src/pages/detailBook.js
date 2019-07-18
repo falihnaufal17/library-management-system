@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { detailBook, deleteBook, updateBook } from '../publics/redux/actions/book';
+import { detailBook, deleteBook } from '../publics/redux/actions/book';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ModalLoaning from '../components/modalLoaning'
 
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
+import ModalUpdate from '../components/modalUpdate';
 
 class DetailBook extends Component {
     constructor(props) {
@@ -29,19 +30,18 @@ class DetailBook extends Component {
     deleteBook = async () => {
 
         await this.props.dispatch(deleteBook(this.props.match.params.bookid))
+
         this.setState({
             books: this.props.book
         })
-        Swal.fire({
+
+        await Swal.fire({
             type: 'success',
             title: 'Berhasil menghapus',
             text: `Data berhasil dihapus`
         })
-    }
 
-    // updateBook = async () =>{
-    //     await
-    // }
+    }
 
     render() {
 
@@ -176,10 +176,15 @@ class DetailBook extends Component {
                         style={btnEdit}
                         onClick={() => this.setState({ modalEditShow: true })}
                     >Edit</div>
+                    <ModalUpdate
+                        show={this.state.modalEditShow}
+                        onHide={modalClose}
+                        data={list}
+                    />
 
-                    <Link to={'/'} onClick={this.deleteBook.bind(this)}>
+                    <Link to={'/'}>
                         <div
-
+                            onClick={this.deleteBook.bind(this)}
                             style={btnDelete}
                         >Delete</div>
                     </Link>
@@ -195,8 +200,9 @@ class DetailBook extends Component {
                         boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.25)',
                         borderRadius: '15px',
                         backgroundRepeat: 'no-repeat',
-                        backgroundSize: 'cover'
-                    }}></div>
+                        backgroundSize: 'cover',
+                        objectFit: 'cover'
+                    }} />
 
                     <div>
                         <h1 style={titleBook}>{text(list ? list.title : '')}</h1>
@@ -266,7 +272,7 @@ class DetailBook extends Component {
                             }}
                             onClick={() => {
                                 this.setState({ modalLoanShow: true })
-                            }} disabled={list ? list.status = 'Tidak Tersedia' : ''}>
+                            }} disabled={list ? list.status === 'Tidak Tersedia' : 'Tersedia'}>
                             Pinjam
                         </button>
                         <ModalLoaning

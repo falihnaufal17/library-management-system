@@ -3,9 +3,11 @@ import { Modal, Form, Button, Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux'
 
 import { getCategories } from '../publics/redux/actions/category'
-import { postBook, getBooks } from '../publics/redux/actions/book'
+import { postBook} from '../publics/redux/actions/book'
 import { getLocation } from '../publics/redux/actions/location';
 import { getStatus } from '../publics/redux/actions/status';
+
+import { Link } from 'react-router-dom'
 
 import swal from 'sweetalert2'
 class ModalForm extends Component {
@@ -45,13 +47,15 @@ class ModalForm extends Component {
 
     addBook = async (title, writer, image, description, locationid, categoryid, statusid) => {
         await this.props.dispatch(postBook(title, writer, image, description, locationid, categoryid, statusid))
-        this.setState({
-            books: this.props.book
-        })
+
         await swal.fire({
             title: 'Add Book',
             type: 'success',
             text: 'Data added successfully!',
+        })
+
+        this.setState({
+            books: this.props.book
         })
     }
 
@@ -161,14 +165,22 @@ class ModalForm extends Component {
                                 </select>
                             </Col>
                         </Form.Group>
-                        <Button style={{
-                            backgroundColor: '#F4CF5D', float: 'right', border: 'none', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)', width: '90px',
-                            height: '40px',
-                        }} onClick={() => {
-                            this.addBook(this.state.title, this.state.writer, this.state.image, this.state.description, this.state.locationid, this.state.categoryid, this.state.statusid)
-                        }}>
-                            Save
+
+                        <Link to={'/'}>
+                            <Button style={{
+                                backgroundColor: '#F4CF5D', float: 'right', border: 'none', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)', width: '90px',
+                                height: '40px',
+                            }} onClick={() => {
+                                this.addBook(this.state.title, this.state.writer, this.state.image, this.state.description, this.state.locationid, this.state.categoryid, this.state.statusid)
+                                swal.fire({
+                                    title: 'Add Book',
+                                    type: 'success',
+                                    text: 'Data added successfully!',
+                                })
+                            }}>
+                                Save
                         </Button>
+                        </Link>
                     </Form>
                 </Modal.Body>
             </Modal>
