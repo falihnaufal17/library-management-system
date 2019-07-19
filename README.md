@@ -5,7 +5,7 @@
 * [`react-js`](https://reactjs.org)
 * [`API library`](https://github.com/falihnaufal17/API-library-management.git)
 
-## How To RUn
+## How To Run
 
 1. Clone this repository
    ```
