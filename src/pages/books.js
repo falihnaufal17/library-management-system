@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getBooks } from '../publics/redux/actions/book';
+import { getBooks, searchBook } from '../publics/redux/actions/book';
 
 import Navbar from '../components/navbar';
 import ModalForm from '../components/modal';
@@ -12,14 +12,26 @@ class Books extends Component {
 
         this.state = {
             modalShow: false,
-            books: []
+            books: [],
+            resultSearch: [],
+            search: ''
         };
+
+        this.searchBook = this.searchBook.bind(this)
+        // this.handleChange = this.handleChange.bind(this)
     }
 
     componentDidMount = async () => {
         await this.props.dispatch(getBooks())
         this.setState({
             books: this.props.book
+        })
+    }
+
+    searchBook = async (search) => {
+        await this.props.dispatch(searchBook(search))
+        this.setState({
+            resultSearch: this.props.book
         })
     }
 
@@ -33,9 +45,10 @@ class Books extends Component {
                 return `${textSplit}`
             }
         }
-        const { books } = this.state
+        const { books, search, resultSearch } = this.state
+        const result = resultSearch.bookList
         const list = books.bookList
-        console.log(list)
+        console.log(list, result)
 
         let modalClose = () => this.setState({ modalShow: false });
         const searchBar = {
@@ -104,15 +117,14 @@ class Books extends Component {
             height: '200px',
             borderRadius: '15px'
         }
-
         return (
 
             <div style={container}>
                 <Navbar></Navbar>
-                <form>
-                    <div>
-                        <input type="text" style={searchBar} placeholder="Search Book..." />
-                    </div>
+                <form onChange={() => { this.searchBook(search) }}>
+                    <input type="text" value={search} style={searchBar} placeholder="Search Book..." onChange={(e) => {
+                        this.setState({ search: e.target.value })
+                    }} />
                 </form>
 
                 <button style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
@@ -124,19 +136,35 @@ class Books extends Component {
 
                 <div style={flexContainer}>
                     {
-                        list && list.result.length > 0 &&
-                        list.result.map((item, index) => {
-                            return (
-                                <Link to={`/bookdetail/${item.bookid}`} key={index}>
-                                    <div style={card}>
-                                        <img src={item.image} style={cardImage} alt="hey" />
-                                        <div style={cardContainer}>
-                                            <h5>{text(item.title)}</h5>
+                        result
+                            ?
+                            result && result.length > 0 &&
+                            result.map((item, index) => {
+                                return (
+                                    <Link to={`/bookdetail/${item.bookid}`} key={index}>
+                                        <div style={card}>
+                                            <img src={item.image} style={cardImage} alt="hey" />
+                                            <div style={cardContainer}>
+                                                <h5>{text(item.title)}</h5>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            )
-                        })
+                                    </Link>
+                                )
+                            })
+                            :
+                            list && list.result.length > 0 &&
+                            list.result.map((item, index) => {
+                                return (
+                                    <Link to={`/bookdetail/${item.bookid}`} key={index}>
+                                        <div style={card}>
+                                            <img src={item.image} style={cardImage} alt="hey" />
+                                            <div style={cardContainer}>
+                                                <h5>{text(item.title)}</h5>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                )
+                            })
                     }
                 </div>
             </div>

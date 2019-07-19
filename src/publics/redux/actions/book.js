@@ -1,9 +1,18 @@
 import axios from 'axios'
 
 export const getBooks = () => {
+    console.log()
     return {
         type: 'GET_BOOK',
-        payload: axios.get('http://localhost:2000/books')
+        payload: axios.get(`http://localhost:2000/books`)
+    }
+}
+
+export const searchBook = (search) => {
+    console.log('Search: ' + search)
+    return {
+        type: 'SEARCH_BOOK',
+        payload: axios.get(`http://localhost:2000/books?search=${search}`)
     }
 }
 

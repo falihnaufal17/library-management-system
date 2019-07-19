@@ -40,7 +40,7 @@ class Navbar extends Component {
         return (
             <div style={titleBar} >
                 <Link to={'/'}>
-                    <h6 style={title}>BOOKS</h6>
+                    <h6 style={title}>Library</h6>
                 </Link>
                 <Link to={'/loaning'}>
                     <span style={navigation}>Loan List</span>
