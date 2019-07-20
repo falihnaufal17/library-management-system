@@ -70,30 +70,51 @@ class Loaning extends Component {
                             <th>Title</th>
                             <th>ID Card</th>
                             <th>Name</th>
-                            <th>Expired Date</th>
                             <th>Created At</th>
+                            <th>Expired Date</th>
+                            <th>Forfeit</th>
+                            <th>Is Verify</th>
                             <th>Action</th>
                         </tr>
                         {
                             list &&
                             list.length > 0 &&
                             list.map((item, key) => {
-                                let status = listbook && listbook.result.length > 0 && listbook.result.find(itm => itm.bookid === item.bookid)
+                                let tgl = new Date()
+                                let hitung = 0
+                                let jmlHari = 0
+                                let tanggal = tgl.getDate()
+                                let bulan = tgl.getMonth() + 1
+                                let tahun = tgl.getFullYear()
+                                let expired = item.expired_date.split('-')
+
+                                if (parseInt(bulan) > parseInt(expired[1])) {
+                                    hitung += (parseInt(bulan) - parseInt(expired[1])) * 5000 * 30
+                                    jmlHari += (parseInt(bulan) - parseInt(expired[1]) * 30)
+                                } else if (parseInt(bulan) == parseInt(expired[1]) && parseInt(tanggal) > parseInt(expired[2])) {
+                                    hitung += (parseInt(tanggal) - parseInt(expired[2])) * 5000
+                                    jmlHari += parseInt(tanggal) - parseInt(expired[2])
+
+                                }
+
                                 let data = {
                                     bookid: item.bookid,
                                     id_card: item.id_card,
-                                    name: item.name
+                                    name: item.name,
+                                    forfeit: hitung
                                 }
                                 return (
                                     <tr key={key}>
                                         <td>{item.title}</td>
                                         <td>{item.id_card}</td>
                                         <td>{item.name}</td>
-                                        <td>{formatDate(item.expired_date)}</td>
                                         <td>{formatDate(item.created_at)}</td>
+                                        <td>{formatDate(item.expired_date)}</td>
+                                        <td>{item.forfeit}</td>
+                                        <td>{item.isverify}</td>
                                         <td>
                                             <Link to={`/loaning/verify/${item.loaningid}`}>
-                                                <button className="btn btn-success" disabled={status ? status.status === "Tersedia" : "Tidak Tersedia"} onClick={() => { this.updateLoan(item.loaningid, data) }}>Verify</button>
+                                                <button className="btn btn-success" disabled={item ? item.isverify === "true" : "false"} onClick={() => { this.updateLoan(item.loaningid, data) }}>Verify</button>
                                             </Link></td>
                                     </tr>
                                 )

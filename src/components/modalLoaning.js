@@ -66,7 +66,9 @@ class ModalLoaning extends Component {
         let data = {
             bookid: this.props.data ? this.props.data.bookid : '',
             id_card: this.state.id_card,
-            name: this.state.name
+            name: this.state.name,
+            forfeit: 0,
+            isverify: 0,
         }
 
         return (
