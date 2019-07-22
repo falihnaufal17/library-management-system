@@ -6,6 +6,9 @@ import Loaning from '../pages/loaning';
 
 import { Provider } from 'react-redux';
 import store from '../publics/redux/store'
+import Register from '../pages/register';
+import Login from '../pages/login';
+import history from '../pages/user/history';
 
 class Routing extends Component {
     render() {
@@ -15,6 +18,9 @@ class Routing extends Component {
                     <Route exact path='/' component={Books} />
                     <Route exact path='/bookdetail/:bookid' component={BookDetail} />
                     <Route exact path='/loaning' component={Loaning} />
+                    <Route exact path='/register' component={Register} />
+                    <Route exact path='/login' component={Login} />
+                    <Route exact path='/history' component={history} />
                 </Router>
             </Provider>
         )
