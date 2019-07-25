@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
 import ModalUpdate from '../components/modalUpdate';
 
+const localdata = JSON.parse(localStorage.getItem('data')) || ''
 class DetailBook extends Component {
     constructor(props) {
         super(props);
@@ -172,22 +173,31 @@ class DetailBook extends Component {
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover'
                 }}>
-                    <div
-                        style={btnEdit}
-                        onClick={() => this.setState({ modalEditShow: true })}
-                    >Edit</div>
-                    <ModalUpdate
-                        show={this.state.modalEditShow}
-                        onHide={modalClose}
-                        data={list}
-                    />
+                    {
+                        localdata.namerole === 'admin'
+                            ?
+                            <div>
+                                <div
+                                    style={btnEdit}
+                                    onClick={() => this.setState({ modalEditShow: true })}
+                                >Edit</div>
+                                <ModalUpdate
+                                    show={this.state.modalEditShow}
+                                    onHide={modalClose}
+                                    data={list}
+                                />
 
-                    <Link to={'/'}>
-                        <div
-                            onClick={this.deleteBook.bind(this)}
-                            style={btnDelete}
-                        >Delete</div>
-                    </Link>
+                                <Link to={'/'}>
+                                    <div
+                                        onClick={this.deleteBook.bind(this)}
+                                        style={btnDelete}
+                                    >Delete</div>
+                                </Link>
+                            </div>
+                            :
+                            ''
+                    }
+
 
                     <div style={{
                         position: 'absolute',
@@ -255,26 +265,52 @@ class DetailBook extends Component {
 
                                 color: '#ffffff',
                             }}>{list ? list.status : ''}</p>
+                        {
+                            localdata.namerole === 'admin' ?
+                                <button
+                                    className="btn btn-outline-success btn-sm"
+                                    style={{
+                                        position: 'absolute',
+                                        width: 'auto',
+                                        height: 'auto',
+                                        left: '865px',
+                                        top: '575px',
 
-                        <button
-                            className="btn btn-outline-success btn-sm"
-                            style={{
-                                position: 'absolute',
-                                width: 'auto',
-                                height: 'auto',
-                                left: '865px',
-                                top: '575px',
-
-                                fontFamily: 'Open Sans',
-                                fontStyle: 'normal',
-                                fontSize: '14px',
-                                lineHeight: '27px',
-                            }}
-                            onClick={() => {
-                                this.setState({ modalLoanShow: true })
-                            }} disabled={list ? list.status === 'Tidak Tersedia' : 'Tersedia'}>
-                            Pinjam
+                                        fontFamily: 'Open Sans',
+                                        fontStyle: 'normal',
+                                        fontSize: '14px',
+                                        lineHeight: '27px',
+                                    }}
+                                    onClick={() => {
+                                        this.setState({ modalLoanShow: true })
+                                    }} disabled={list ? list.status === 'Tidak Tersedia' : 'Tersedia'}>
+                                    Pinjam
                         </button>
+                                :
+                                localdata.namerole === 'user' ?
+                                    <button
+                                        className="btn btn-outline-success btn-sm"
+                                        style={{
+                                            position: 'absolute',
+                                            width: 'auto',
+                                            height: 'auto',
+                                            left: '865px',
+                                            top: '575px',
+
+                                            fontFamily: 'Open Sans',
+                                            fontStyle: 'normal',
+                                            fontSize: '14px',
+                                            lineHeight: '27px',
+                                        }}
+                                        onClick={() => {
+                                            this.setState({ modalLoanShow: true })
+                                        }} disabled={list ? list.status === 'Tidak Tersedia' : 'Tersedia'}>
+                                        Pinjam
+                        </button>
+                                    :
+                                    ''
+                        }
+
                         <ModalLoaning
                             show={this.state.modalLoanShow}
                             onHide={modalClose}

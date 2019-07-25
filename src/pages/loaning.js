@@ -7,6 +7,9 @@ import { getLoan, updateLoan } from '../publics/redux/actions/loan'
 import { getBooks } from '../publics/redux/actions/book'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2';
+let getToken = localStorage.token
+let iduser = localStorage.number
+const localdata = JSON.parse(localStorage.getItem('data'))
 class Loaning extends Component {
     constructor(props) {
         super(props)
@@ -61,7 +64,6 @@ class Loaning extends Component {
         }
         return (
             <div>
-                <Navbar></Navbar>
                 <div class="container-fluid" style={{ marginTop: "100px" }}>
 
                     <h1>Loaning Page</h1>
@@ -100,7 +102,6 @@ class Loaning extends Component {
                                 let data = {
                                     bookid: item.bookid,
                                     id_card: item.id_card,
-                                    name: item.name,
                                     forfeit: hitung
                                 }
                                 return (

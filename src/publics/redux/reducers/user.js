@@ -1,95 +1,99 @@
 const initializeState = {
-    loanList: [],
+    userList: [],
     isLoading: false,
-    isRejected: false,
-    isFulFilled: false
+    isFulFilled: false,
+    isRejected: false
 }
 
-const loan = (state = initializeState, action) => {
+const user = (state = initializeState, action) => {
     switch (action.type) {
-        case 'GET_LOAN_PENDING':
+        case 'GET_USER_PENDING':
             return {
                 ...state,
                 isLoading: true,
-                isRejected: false,
-                isFulFilled: false
+                isFulFilled: false,
+                isRejected: false
             }
-        case 'GET_LOAN_REJECTED':
+        case 'GET_USER_REJECTED':
             return {
                 ...state,
                 isLoading: false,
                 isRejected: true
             }
-        case 'GET_LOAN_FULFILLED':
+        case 'GET_USER_FULFILLED':
             return {
                 ...state,
                 isLoading: false,
                 isFulFilled: true,
-                loanList: action.payload.data.result
+                userList: action.payload.data.result
             }
-        case 'ADD_LOAN_PENDING':
+        case 'REGISTER_USER_PENDING':
             return {
                 ...state,
                 isLoading: true,
-                isRejected: false,
-                isFulFilled: false
+                isFulFilled: false,
+                isRejected: false
             }
-        case 'ADD_LOAN_REJECTED':
+        case 'REGISTER_USER_REJECTED':
             return {
                 ...state,
                 isLoading: false,
                 isRejected: true
             }
-        case 'ADD_LOAN_FULFILLED':
+        case 'REGISTER_USER_FULFILLED':
             return {
                 ...state,
                 isLoading: false,
                 isFulFilled: true,
-                loanList: [state.loanList, action.payload.data[0]]
+                userList: [state.userList, action.payload.data[0]]
             }
-        case 'UPDATE_LOAN_PENDING':
+        case 'LOGIN_USER_PENDING':
             return {
                 ...state,
                 isLoading: true,
-                isRejected: false,
-                isFulFilled: false
+                isFulFilled: false,
+                isRejected: false
             }
-        case 'UPDATE_LOAN_REJECTED':
+        case 'LOGIN_USER_REJECTED':
             return {
                 ...state,
                 isLoading: false,
                 isRejected: true
             }
-        case 'UPDATE_LOAN_FULFILLED':
+        case 'LOGIN_USER_FULFILLED':
+            localStorage.setItem('token', 'bearer ' + action.payload.data.result.token)
+            localStorage.setItem('number', action.payload.data.result.iduser)
+            localStorage.setItem('data', JSON.stringify(action.payload.data.result))
             return {
                 ...state,
                 isLoading: false,
                 isFulFilled: true,
-                loanList: [state.loanList, action.payload.data[0]]
+                userList: action.payload.data.result
             }
-        case 'HISTORY_LOAN_PENDING':
+        case 'LOGOUT_USER_PENDING':
             return {
                 ...state,
                 isLoading: true,
-                isRejected: false,
-                isFulFilled: false
+                isFulFilled: false,
+                isRejected: false
             }
-        case 'HISTORY_LOAN_REJECTED':
+        case 'LOGOUT_USER_REJECTED':
             return {
                 ...state,
                 isLoading: false,
                 isRejected: true
             }
-        case 'HISTORY_LOAN_FULFILLED':
+        case 'LOGOUT_USER_FULFILLED':
+            localStorage.clear()
             return {
                 ...state,
                 isLoading: false,
                 isFulFilled: true,
-                loanList: action.payload.data.result
+                userList: action.payload.data.result
             }
         default:
             return state
     }
 }
 
-export default loan
+export default user

@@ -20,3 +20,10 @@ export const updateLoan = (loaningid, data) => {
         payload: axios.patch(`http://localhost:2000/loaning/${loaningid}`, data)
     }
 }
+
+export const historyLoan = (iduser) => {
+    return {
+        type: 'HISTORY_LOAN',
+        payload: axios.get(`http://localhost:2000/loaning/users/${iduser}`)
+    }
+}

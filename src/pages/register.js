@@ -1,21 +1,68 @@
 import React, { Component } from 'react';
 import { Form, Button, Card, Navbar, Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
-export default class Register extends Component {
+import { connect } from 'react-redux'
+import { register } from '../publics/redux/actions/user'
+
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
+class Register extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            users: [],
+            id_card: '',
+            name: '',
+            email: '',
+            password: '',
+            role: 2,
+
+            value: ''
+        }
+
+        this.handleInputChange = this.handleInputChange.bind(this)
+    }
+
+    register = async (data) => {
+        await this.props.dispatch(register(data))
+
+        await Swal.fire({
+            title: 'Register User',
+            type: 'success',
+            text: 'Registration Successfully!'
+        })
+
+        this.setState({
+            users: this.props.user,
+            id_card: '',
+            name: '',
+            email: '',
+            password: '',
+        })
+    }
+
+    handleInputChange(e) {
+        const target = e.target
+        const value = target.value
+        const name = target.name
+        this.setState({
+            [name]: value,
+        })
+    }
+
     render() {
+        const { id_card, name, email, password, role } = this.state
+
+        let data = {
+            id_card: id_card,
+            name: name,
+            email: email,
+            password: password,
+            idrole: role
+        }
         return (
             <div>
-                <Navbar className="shadow" bg="light">
-                    <Navbar.Brand><Link to="/" style={{ color: '#000000', textDecoration: 'none', fontWeight: 'bold', fontSize: '30px' }}>Library</Link></Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link><Link to="/login" style={{ color: '#000000', textDecoration: 'none' }}>Login</Link></Nav.Link>
-                            <Nav.Link><Link to="/register" style={{ color: '#000000', textDecoration: 'none'}}>Register</Link></Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
                 <Card className="mt-3" style={{ margin: 'auto', width: '50%' }}>
                     <Card.Header>
                         <Card.Title>Register Form</Card.Title>
@@ -25,24 +72,28 @@ export default class Register extends Component {
                         <Form>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>ID Card:</Form.Label>
-                                <Form.Control type="Text" placeholder="Enter id card... (number)" />
+                                <Form.Control type="Text" name="id_card" placeholder="Enter id card... (number)" value={id_card} onChange={this.handleInputChange} />
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Name:</Form.Label>
-                                <Form.Control type="Text" placeholder="Enter name..." />
+                                <Form.Control type="Text" placeholder="Enter name..."
+                                    name="name" value={name} onChange={this.handleInputChange} />
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Email:</Form.Label>
-                                <Form.Control type="email" placeholder="Enter email..." />
+                                <Form.Control type="email" placeholder="Enter email..." name="email" value={email} onChange={this.handleInputChange} />
                                 <Form.Text className="text-muted">
                                     We'll never share your email with anyone else.
                         </Form.Text>
                             </Form.Group>
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label>Password:</Form.Label>
-                                <Form.Control type="password" placeholder="Password..." />
+                                <Form.Control type="password" placeholder="Password..." name="password" value={password} onChange={this.handleInputChange} />
                             </Form.Group>
-                            <Button variant="primary" type="submit">
+                            <input type="hidden" value={role} />
+                            <Button variant="success" onClick={() => {
+                                this.register(data)
+                            }}>
                                 Register!
                             </Button>
                         </Form>
@@ -52,3 +103,11 @@ export default class Register extends Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps)(Register)

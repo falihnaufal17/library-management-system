@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import { addLoan, getLoan } from '../publics/redux/actions/loan'
 
 import swal from 'sweetalert2'
+let iduser = localStorage.number
+const localdata = JSON.parse(localStorage.getItem('data')) || ''
 class ModalLoaning extends Component {
     constructor(props) {
         super(props)
@@ -65,8 +67,7 @@ class ModalLoaning extends Component {
 
         let data = {
             bookid: this.props.data ? this.props.data.bookid : '',
-            id_card: this.state.id_card,
-            name: this.state.name,
+            id_card: localdata.iduser,
             forfeit: 0,
             isverify: 0,
         }
@@ -87,23 +88,30 @@ class ModalLoaning extends Component {
                         <Form.Group controlId="formTitle" as={Row}>
                             <Form.Label column sm="2">Title Book</Form.Label>
                             <Col sm="10">
-                                <select value={bookid} onChange={this.handleInputChange}>
+                                <ul className="list-unstyled">
+                                    <li value={bookid}>{this.props.data ? this.props.data.title : ''}</li>
+                                </ul>
+                                {/* <select value={bookid} className="form-control" onChange={this.handleInputChange}>
                                     <option value={bookid}>{this.props.data ? this.props.data.title : ''}</option>
-                                </select>
+                                </select> */}
                             </Col>
                         </Form.Group>
 
                         <Form.Group controlId="formWriter" as={Row}>
                             <Form.Label column sm="2">ID Card</Form.Label>
                             <Col sm="10">
-                                <Form.Control name="id_card" placeholder="Id Card..." onChange={this.handleInputChange} value={id_card} />
+                                <ul className="list-unstyled">
+                                    <li>{localdata.id_card}</li>
+                                </ul>
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row} controlId="formUrlImage">
                             <Form.Label column sm="2">Name</Form.Label>
                             <Col sm="10">
-                                <Form.Control name="name" placeholder="Name..." onChange={this.handleInputChange} value={name} />
+                                <ul className="list-unstyled">
+                                    <li>{localdata.name}</li>
+                                </ul>
                             </Col>
                         </Form.Group>
 

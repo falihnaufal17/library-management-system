@@ -6,6 +6,9 @@ import Navbar from '../components/navbar';
 import ModalForm from '../components/modal';
 import { Link } from 'react-router-dom';
 
+let getToken = localStorage.token
+let iduser = localStorage.number
+const localdata = JSON.parse(localStorage.getItem('data')) || ''
 class Books extends Component {
     constructor(props) {
         super(props);
@@ -22,14 +25,15 @@ class Books extends Component {
     }
 
     componentDidMount = async () => {
-        await this.props.dispatch(getBooks())
+
+        await this.props.dispatch(getBooks(getToken, iduser))
         this.setState({
             books: this.props.book
         })
     }
 
     searchBook = async (search) => {
-        await this.props.dispatch(searchBook(search))
+        await this.props.dispatch(searchBook(search, getToken, iduser))
         this.setState({
             resultSearch: this.props.book
         })
@@ -120,14 +124,23 @@ class Books extends Component {
         return (
 
             <div style={container}>
-                <Navbar></Navbar>
                 <form onChange={() => { this.searchBook(search) }}>
                     <input type="text" value={search} style={searchBar} placeholder="Search Book..." onChange={(e) => {
                         this.setState({ search: e.target.value })
                     }} />
                 </form>
+                {
+                    localdata.namerole === 'admin'
+                        ?
+                        <button style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
+                        :
+                        localdata.namerole === 'user'
+                            ?
+                            <button disabled style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
+                            :
+                            ''
+                }
 
-                <button style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
 
                 <ModalForm
                     show={this.state.modalShow}
