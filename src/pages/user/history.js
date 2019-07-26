@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import Navbar from '../../components/navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { historyLoan } from '../../publics/redux/actions/loan'
 import { getBooks } from '../../publics/redux/actions/book'
 import { connect } from 'react-redux'
 import { Card } from 'react-bootstrap';
+let getToken = localStorage.token
 let iduser = localStorage.number
-const localdata = JSON.parse(localStorage.getItem('data'))
+const localdata = JSON.parse(localStorage.getItem('data')) || ''
 class History extends Component {
     constructor(props) {
         super(props)
@@ -21,7 +21,7 @@ class History extends Component {
     }
 
     componentDidMount = async () => {
-        await this.props.dispatch(historyLoan(iduser))
+        await this.props.dispatch(historyLoan(getToken, iduser))
         await this.props.dispatch(getBooks())
         this.setState({
             loans: this.props.loan,
@@ -56,9 +56,9 @@ class History extends Component {
                             <Card.Subtitle>
                                 {localdata.status
                                     ?
-                                    <div className="badge badge-secondary">Offline</div>
-                                    :
                                     <div className="badge badge-success ">Online</div>
+                                    :
+                                    <div className="badge badge-secondary">Offline</div>
                                 }
                             </Card.Subtitle>
                         </Card.Header>
@@ -92,7 +92,7 @@ class History extends Component {
                                     })
                                     :
                                     <tr>
-                                        <td colSpan="7" align="center">Kamu belum meminjam buku</td>
+                                        <td colSpan="7" align="center">Kamu belum meminjam buku / You Unauthorized</td>
                                     </tr>
 
                             }

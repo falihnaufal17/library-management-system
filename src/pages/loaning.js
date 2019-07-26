@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Navbar from '../components/navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { connect } from 'react-redux'
@@ -7,9 +6,9 @@ import { getLoan, updateLoan } from '../publics/redux/actions/loan'
 import { getBooks } from '../publics/redux/actions/book'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2';
+import ModalLoan from '../components/modalAdminLoan';
 let getToken = localStorage.token
 let iduser = localStorage.number
-const localdata = JSON.parse(localStorage.getItem('data'))
 class Loaning extends Component {
     constructor(props) {
         super(props)
@@ -19,14 +18,15 @@ class Loaning extends Component {
             books: [],
             bookid: 0,
             id_card: 0,
-            name: ''
+            name: '',
+            modalLoanShow: false,
         }
 
         this.updateLoan = this.updateLoan.bind(this)
     }
 
     componentDidMount = async () => {
-        await this.props.dispatch(getLoan())
+        await this.props.dispatch(getLoan(getToken, iduser))
         await this.props.dispatch(getBooks())
         this.setState({
             loans: this.props.loan,
@@ -53,6 +53,11 @@ class Loaning extends Component {
         const listbook = books.bookList
         const list = loans.loanList
         console.log(list, listbook)
+
+        let modalClose = () => this.setState({
+            modalLoanShow: false,
+        });
+
         function formatDate(date) {
             let data = Date.parse(date);
             let newDate = new Date(data);
@@ -64,9 +69,19 @@ class Loaning extends Component {
         }
         return (
             <div>
-                <div class="container-fluid" style={{ marginTop: "100px" }}>
+                <div class="container-fluid mt-5">
+                    <h1 className="float-left">Loaning Page</h1>
+                    <button className="btn btn-outline-success float-right btn-md" onClick={() => {
+                        this.setState({ modalLoanShow: true })
+                    }}>
+                        Add Loan
+                    </button>
 
-                    <h1>Loaning Page</h1>
+                    <ModalLoan
+                        show={this.state.modalLoanShow}
+                        onHide={modalClose}
+                    />
+
                     <table className="table table-bordered table-striped">
                         <tr>
                             <th>Title</th>
@@ -84,16 +99,15 @@ class Loaning extends Component {
                             list.map((item, key) => {
                                 let tgl = new Date()
                                 let hitung = 0
-                                let jmlHari = 0
                                 let tanggal = tgl.getDate()
                                 let bulan = tgl.getMonth() + 1
-                                let tahun = tgl.getFullYear()
                                 let expired = item.expired_date.split('-')
+                                let jmlHari = 0
 
                                 if (parseInt(bulan) > parseInt(expired[1])) {
                                     hitung += (parseInt(bulan) - parseInt(expired[1])) * 5000 * 30
                                     jmlHari += (parseInt(bulan) - parseInt(expired[1]) * 30)
-                                } else if (parseInt(bulan) == parseInt(expired[1]) && parseInt(tanggal) > parseInt(expired[2])) {
+                                } else if (parseInt(bulan) === parseInt(expired[1]) && parseInt(tanggal) > parseInt(expired[2])) {
                                     hitung += (parseInt(tanggal) - parseInt(expired[2])) * 5000
                                     jmlHari += parseInt(tanggal) - parseInt(expired[2])
 

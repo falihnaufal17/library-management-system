@@ -285,9 +285,9 @@ class DetailBook extends Component {
                                         this.setState({ modalLoanShow: true })
                                     }} disabled={list ? list.status === 'Tidak Tersedia' : 'Tersedia'}>
                                     Pinjam
-                        </button>
+                                </button>
                                 :
-                                localdata.namerole === 'user' ?
+                                localdata.namerole === 'user' && localdata.isverify === 'true' ?
                                     <button
                                         className="btn btn-outline-success btn-sm"
                                         style={{
@@ -306,9 +306,25 @@ class DetailBook extends Component {
                                             this.setState({ modalLoanShow: true })
                                         }} disabled={list ? list.status === 'Tidak Tersedia' : 'Tersedia'}>
                                         Pinjam
-                        </button>
+                                    </button>
                                     :
-                                    ''
+                                    localdata.namerole === 'user' && localdata.isverify === 'false' ?
+                                        <p style={{
+                                            position: 'absolute',
+                                            width: 'auto',
+                                            height: 'auto',
+                                            left: '650px',
+                                            top: '575px',
+                                            fontWeight: 'bold',
+                                            color: '#ff5555',
+
+                                            fontFamily: 'Open Sans',
+                                            fontStyle: 'normal',
+                                            fontSize: '14px',
+                                            lineHeight: '27px',
+                                        }}>Akun belum diverifikasi! Silahkan hubungi admin!</p>
+                                        :
+                                        ''
                         }
 
                         <ModalLoaning

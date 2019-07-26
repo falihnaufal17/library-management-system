@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { logout } from '../publics/redux/actions/user';
 import { connect } from 'react-redux';
-let getToken = localStorage.token
 let iduser = localStorage.number
 class Navigation extends Component {
     constructor(props) {
@@ -12,6 +11,7 @@ class Navigation extends Component {
         this.state = {
             users: [],
         }
+        this.logout = this.logout.bind(this)
     }
 
     logout = async () => {
@@ -57,9 +57,10 @@ class Navigation extends Component {
                                         <NavDropdown title={this.props.username} id="basic-nav-dropdown">
                                             <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                            <NavDropdown.Item href="/" onClick={() => {
+                                            <NavDropdown.Item onClick={() => {
                                                 this.logout()
-                                            }}>Logout</NavDropdown.Item>
+                                            }
+                                            }>Logout</NavDropdown.Item>
                                         </NavDropdown>
                                     </Nav>
                                     <Nav className="ml-auto">

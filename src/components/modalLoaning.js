@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { addLoan, getLoan } from '../publics/redux/actions/loan'
 
 import swal from 'sweetalert2'
-let iduser = localStorage.number
 const localdata = JSON.parse(localStorage.getItem('data')) || ''
 class ModalLoaning extends Component {
     constructor(props) {
@@ -61,7 +60,7 @@ class ModalLoaning extends Component {
     }
 
     render() {
-        const { loans, id_card, bookid, name } = this.state
+        const { loans, bookid } = this.state
         let list = loans.loanList
         console.log(list)
 
@@ -91,9 +90,6 @@ class ModalLoaning extends Component {
                                 <ul className="list-unstyled">
                                     <li value={bookid}>{this.props.data ? this.props.data.title : ''}</li>
                                 </ul>
-                                {/* <select value={bookid} className="form-control" onChange={this.handleInputChange}>
-                                    <option value={bookid}>{this.props.data ? this.props.data.title : ''}</option>
-                                </select> */}
                             </Col>
                         </Form.Group>
 

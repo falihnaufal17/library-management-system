@@ -55,6 +55,7 @@ const user = (state = initializeState, action) => {
                 isRejected: false
             }
         case 'LOGIN_USER_REJECTED':
+            localStorage.setItem('error', 'Wrong email or password')
             return {
                 ...state,
                 isLoading: false,
@@ -85,11 +86,32 @@ const user = (state = initializeState, action) => {
             }
         case 'LOGOUT_USER_FULFILLED':
             localStorage.clear()
+            localStorage.setItem('data', JSON.stringify(action.payload.data.result))
             return {
                 ...state,
                 isLoading: false,
                 isFulFilled: true,
                 userList: action.payload.data.result
+            }
+        case 'VERIFY_USER_PENDING':
+            return {
+                ...state,
+                isLoading: true,
+                isFulFilled: false,
+                isRejected: false
+            }
+        case 'VERIFY_USER_REJECTED':
+            return {
+                ...state,
+                isLoading: false,
+                isRejected: true
+            }
+        case 'VERIFY_USER_FULFILLED':
+            return {
+                ...state,
+                isLoading: false,
+                isFulFilled: true,
+                userList: [state.userList, action.payload.data[0]]
             }
         default:
             return state

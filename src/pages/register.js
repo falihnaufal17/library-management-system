@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Button, Card, Navbar, Nav } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 
 import { connect } from 'react-redux'
 import { register } from '../publics/redux/actions/user'
 
-import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 class Register extends Component {
@@ -25,21 +24,36 @@ class Register extends Component {
     }
 
     register = async (data) => {
-        await this.props.dispatch(register(data))
+        if (this.state.id_card === '' || this.state.name === '' || this.state.email === '' || this.state.password === '') {
+            Swal.fire({
+                title: 'Register Failed!',
+                type: 'warning',
+                text: 'Please fill the form correctly!'
+            })
+            this.setState({
+                id_card: '',
+                name: '',
+                email: '',
+                password: '',
+            })
+        } else {
+            await this.props.dispatch(register(data))
 
-        await Swal.fire({
-            title: 'Register User',
-            type: 'success',
-            text: 'Registration Successfully!'
-        })
+            await Swal.fire({
+                title: 'Register User',
+                type: 'success',
+                text: 'Registration Successfully!'
+            })
 
-        this.setState({
-            users: this.props.user,
-            id_card: '',
-            name: '',
-            email: '',
-            password: '',
-        })
+            this.setState({
+                users: this.props.user,
+                id_card: '',
+                name: '',
+                email: '',
+                password: '',
+            })
+        }
+
     }
 
     handleInputChange(e) {

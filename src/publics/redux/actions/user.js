@@ -34,3 +34,10 @@ export const logout = (iduser) => {
     }
 }
 
+export const verifyUser = (iduser, data) => {
+    return {
+        type: 'VERIFY_USER',
+        payload: axios.patch(`http://localhost:2000/users/verify/${iduser}`, data)
+    }
+}
+

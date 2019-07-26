@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getBooks, searchBook } from '../publics/redux/actions/book';
-
-import Navbar from '../components/navbar';
 import ModalForm from '../components/modal';
 import { Link } from 'react-router-dom';
 
@@ -26,14 +24,14 @@ class Books extends Component {
 
     componentDidMount = async () => {
 
-        await this.props.dispatch(getBooks(getToken, iduser))
+        await this.props.dispatch(getBooks())
         this.setState({
             books: this.props.book
         })
     }
 
     searchBook = async (search) => {
-        await this.props.dispatch(searchBook(search, getToken, iduser))
+        await this.props.dispatch(searchBook(search))
         this.setState({
             resultSearch: this.props.book
         })

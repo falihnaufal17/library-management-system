@@ -1,30 +1,25 @@
 import axios from 'axios'
 
-export const getBooks = (token, iduser) => {
-    console.log()
-    return {
-        type: 'GET_BOOK',
-        payload: axios.get(`http://localhost:2000/books`, {
-            headers: {
-                'authorization': 'x-control-app',
-                'x-access-token': token,
-                'x-control-user': iduser
-            }
-        })
+export const getBookByStatus = () => {
+    return{
+        type: 'GET_BOOKSTATUS',
+        payload: axios.get(`http://localhost:2000/books/bookstatus`)
     }
 }
 
-export const searchBook = (search,token, iduser) => {
+export const getBooks = () => {
+    console.log()
+    return {
+        type: 'GET_BOOK',
+        payload: axios.get(`http://localhost:2000/books`)
+    }
+}
+
+export const searchBook = (search) => {
     console.log('Search: ' + search)
     return {
         type: 'SEARCH_BOOK',
-        payload: axios.get(`http://localhost:2000/books?search=${search}`,{
-            headers: {
-                'authorization': 'x-control-app',
-                'x-access-token': token,
-                'x-control-user': iduser
-            }
-        })
+        payload: axios.get(`http://localhost:2000/books?search=${search}`)
     }
 }
 

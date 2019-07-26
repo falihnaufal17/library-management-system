@@ -7,6 +7,26 @@ const initialState = {
 
 const book = (state = initialState, action) => {
     switch (action.type) {
+        case 'GET_BOOKSTATUS_PENDING':
+            return {
+                ...state,
+                isLoading: true,
+                isFulFilled: false,
+                isRejected: false
+            }
+        case 'GET_BOOKSTATUS_REJECTED':
+            return {
+                ...state,
+                isLoading: false,
+                isRejected: true
+            }
+        case 'GET_BOOKSTATUS_FULFILLED':
+            return {
+                ...state,
+                isLoading: false,
+                isFulFilled: true,
+                bookList: action.payload.data
+            }
         case 'GET_BOOK_PENDING':
             return {
                 ...state,

@@ -1,9 +1,15 @@
 import axios from 'axios'
 
-export const getLoan = () => {
+export const getLoan = (token, iduser) => {
     return {
         type: 'GET_LOAN',
-        payload: axios.get('http://localhost:2000/loaning')
+        payload: axios.get('http://localhost:2000/loaning', {
+            headers: {
+                'authorization': 'x-control-app',
+                'x-access-token': token,
+                'x-control-user': iduser
+            }
+        })
     }
 }
 
@@ -21,9 +27,15 @@ export const updateLoan = (loaningid, data) => {
     }
 }
 
-export const historyLoan = (iduser) => {
+export const historyLoan = (token, iduser) => {
     return {
         type: 'HISTORY_LOAN',
-        payload: axios.get(`http://localhost:2000/loaning/users/${iduser}`)
+        payload: axios.get(`http://localhost:2000/loaning/users/${iduser}`, {
+            headers: {
+                'authorization': 'x-control-app',
+                'x-access-token': token,
+                'x-control-user': iduser
+            }
+        })
     }
 }

@@ -3,7 +3,7 @@ import { Modal, Form, Button, Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux'
 
 import { getCategories } from '../publics/redux/actions/category'
-import { postBook} from '../publics/redux/actions/book'
+import { postBook } from '../publics/redux/actions/book'
 import { getLocation } from '../publics/redux/actions/location';
 import { getStatus } from '../publics/redux/actions/status';
 
@@ -46,17 +46,30 @@ class ModalForm extends Component {
     }
 
     addBook = async (title, writer, image, description, locationid, categoryid, statusid) => {
-        await this.props.dispatch(postBook(title, writer, image, description, locationid, categoryid, statusid))
+        if (this.state.title === '' || this.state.writer === '' || this.state.image === '' || this.state.description === '') {
+            swal.fire({
+                title: 'Add Book Failed',
+                type: 'warning',
+                text: 'Failed add data, please fill the blank form correctly!'
+            })
+        } else {
+            await this.props.dispatch(postBook(title, writer, image, description, locationid, categoryid, statusid))
 
-        await swal.fire({
-            title: 'Add Book',
-            type: 'success',
-            text: 'Data added successfully!',
-        })
+            await swal.fire({
+                title: 'Add Book',
+                type: 'success',
+                text: 'Data added successfully!',
+            })
 
-        this.setState({
-            books: this.props.book
-        })
+            this.setState({
+                books: this.props.book,
+                title: '',
+                writer: '',
+                image: '',
+                description: ''
+            })
+        }
+
     }
 
     handleInputChange(e) {
@@ -172,11 +185,6 @@ class ModalForm extends Component {
                                 height: '40px',
                             }} onClick={() => {
                                 this.addBook(this.state.title, this.state.writer, this.state.image, this.state.description, this.state.locationid, this.state.categoryid, this.state.statusid)
-                                swal.fire({
-                                    title: 'Add Book',
-                                    type: 'success',
-                                    text: 'Data added successfully!',
-                                })
                             }}>
                                 Save
                         </Button>

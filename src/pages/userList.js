@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { getUsers } from '../publics/redux/actions/user';
+import { getUsers, verifyUser } from '../publics/redux/actions/user';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
 let getToken = localStorage.token
 let iduser = localStorage.number
 class UserList extends Component {
@@ -8,7 +9,8 @@ class UserList extends Component {
         super(props)
 
         this.state = {
-            users: []
+            users: [],
+            isverify: 'true',
         }
     }
 
@@ -19,9 +21,20 @@ class UserList extends Component {
         })
     }
 
-    render() {
-        const { users } = this.state
+    verifyUser = async (userid, data) => {
+        await this.props.dispatch(verifyUser(userid, data))
+        this.setState({
+            users: this.props.user
+        })
+    }
 
+    render() {
+        const { users, isverify } = this.state
+
+        const data = {
+            isverify: isverify,
+            updated_at: new Date()
+        }
         const list = users.userList
         console.log(list)
         return (
@@ -35,13 +48,15 @@ class UserList extends Component {
                             <th>Email</th>
                             <th>Status</th>
                             <th>Role</th>
+                            <th>Is Verify</th>
+                            <th>Action</th>
                         </tr>
                         {
                             list &&
                                 list.length > 0 ?
                                 list.map((item, key) => {
                                     return (
-                                        <tr>
+                                        <tr key={key}>
                                             <td>{item.id_card}</td>
                                             <td>{item.name}</td>
                                             <td>{item.email}</td>
@@ -50,12 +65,16 @@ class UserList extends Component {
                                                 <div className="badge badge-success">Online</div>
                                                 : <div className="badge badge-secondary">Offline</div>}</td>
                                             <td>{item.namerole}</td>
+                                            <td>{item.isverify}</td>
+                                            <td><Button href={'/userlist'} onClick={() => {
+                                                this.verifyUser(item.iduser, data)
+                                            }} className="btn btn-sm btn-success" disabled={item ? item.isverify === 'true' : 'false'}>Verify</Button></td>
                                         </tr>
                                     )
                                 })
                                 :
                                 <tr>
-                                    <td colSpan="5">You UNAUTHORIZED!</td>
+                                    <td colSpan="7" align="center">You UNAUTHORIZED!</td>
                                 </tr>
                         }
                     </table>

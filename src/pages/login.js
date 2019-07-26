@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Button, Card, Navbar, Nav } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { login } from '../publics/redux/actions/user'
 import Swal from 'sweetalert2';
@@ -28,18 +27,29 @@ class Login extends Component {
                 title: 'Login Failed',
                 text: 'Please fill data correctly!'
             })
-        } else if (!this.state.email === data.email || !this.state.password === data.password) {
+
+            this.setState({
+                email: '',
+                password: '',
+            })
+        } else if (!this.state.email || !this.state.password) {
             await Swal.fire({
                 type: 'warning',
                 title: 'Login Failed',
                 text: 'Wrong email or password!'
             })
-        } else {
-            await this.props.dispatch(login(data))
+
             this.setState({
-                users: this.props.user
+                email: '',
+                password: '',
             })
         }
+        await this.props.dispatch(login(data))
+        this.setState({
+            users: this.props.user,
+            email: '',
+            password: '',
+        })
     }
 
     handleInputChange(e) {
