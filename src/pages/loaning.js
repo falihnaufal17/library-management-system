@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import ModalLoan from '../components/modalAdminLoan';
 let getToken = localStorage.token
 let iduser = localStorage.number
+let localdata = localStorage.getItem('data') || ''
 class Loaning extends Component {
     constructor(props) {
         super(props)
@@ -69,74 +70,82 @@ class Loaning extends Component {
         }
         return (
             <div>
-                <div class="container-fluid mt-5">
-                    <h1 className="float-left">Loaning Page</h1>
-                    <button className="btn btn-outline-success float-right btn-md" onClick={() => {
-                        this.setState({ modalLoanShow: true })
-                    }}>
-                        Add Loan
+                {
+                    localdata.namerole === 'admin'
+                        ?
+                        <div class="container-fluid mt-5">
+                            <h1 className="float-left">Loaning Page</h1>
+                            <button className="btn btn-outline-success float-right btn-md" onClick={() => {
+                                this.setState({ modalLoanShow: true })
+                            }}>
+                                Add Loan
                     </button>
 
-                    <ModalLoan
-                        show={this.state.modalLoanShow}
-                        onHide={modalClose}
-                    />
+                            <ModalLoan
+                                show={this.state.modalLoanShow}
+                                onHide={modalClose}
+                            />
 
-                    <table className="table table-bordered table-striped">
-                        <tr>
-                            <th>Title</th>
-                            <th>ID Card</th>
-                            <th>Name</th>
-                            <th>Created At</th>
-                            <th>Expired Date</th>
-                            <th>Forfeit</th>
-                            <th>Is Verify</th>
-                            <th>Action</th>
-                        </tr>
-                        {
-                            list &&
-                            list.length > 0 &&
-                            list.map((item, key) => {
-                                let tgl = new Date()
-                                let hitung = 0
-                                let tanggal = tgl.getDate()
-                                let bulan = tgl.getMonth() + 1
-                                let expired = item.expired_date.split('-')
-                                let jmlHari = 0
+                            <table className="table table-bordered table-striped">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>ID Card</th>
+                                    <th>Name</th>
+                                    <th>Created At</th>
+                                    <th>Expired Date</th>
+                                    <th>Forfeit</th>
+                                    <th>Is Verify</th>
+                                    <th>Action</th>
+                                </tr>
+                                {
+                                    list &&
+                                    list.length > 0 &&
+                                    list.map((item, key) => {
+                                        let tgl = new Date()
+                                        let hitung = 0
+                                        let tanggal = tgl.getDate()
+                                        let bulan = tgl.getMonth() + 1
+                                        let expired = item.expired_date.split('-')
+                                        let jmlHari = 0
 
-                                if (parseInt(bulan) > parseInt(expired[1])) {
-                                    hitung += (parseInt(bulan) - parseInt(expired[1])) * 5000 * 30
-                                    jmlHari += (parseInt(bulan) - parseInt(expired[1]) * 30)
-                                } else if (parseInt(bulan) === parseInt(expired[1]) && parseInt(tanggal) > parseInt(expired[2])) {
-                                    hitung += (parseInt(tanggal) - parseInt(expired[2])) * 5000
-                                    jmlHari += parseInt(tanggal) - parseInt(expired[2])
+                                        if (parseInt(bulan) > parseInt(expired[1])) {
+                                            hitung += (parseInt(bulan) - parseInt(expired[1])) * 5000 * 30
+                                            jmlHari += (parseInt(bulan) - parseInt(expired[1]) * 30)
+                                        } else if (parseInt(bulan) === parseInt(expired[1]) && parseInt(tanggal) > parseInt(expired[2])) {
+                                            hitung += (parseInt(tanggal) - parseInt(expired[2])) * 5000
+                                            jmlHari += parseInt(tanggal) - parseInt(expired[2])
 
+                                        }
+
+                                        let data = {
+                                            bookid: item.bookid,
+                                            id_card: item.id_card,
+                                            forfeit: hitung
+                                        }
+                                        return (
+                                            <tr key={key}>
+                                                <td>{item.title}</td>
+                                                <td>{item.id_card}</td>
+                                                <td>{item.name}</td>
+                                                <td>{formatDate(item.created_at)}</td>
+                                                <td>{formatDate(item.expired_date)}</td>
+                                                <td>{item.forfeit}</td>
+                                                <td>{item.isverify}</td>
+                                                <td>
+                                                    <Link to={`/loaning/verify/${item.loaningid}`}>
+                                                        <button className="btn btn-success" disabled={item ? item.isverify === "true" : "false"} onClick={() => { this.updateLoan(item.loaningid, data) }}>Verify</button>
+                                                    </Link></td>
+                                            </tr>
+                                        )
+                                    })
                                 }
-
-                                let data = {
-                                    bookid: item.bookid,
-                                    id_card: item.id_card,
-                                    forfeit: hitung
-                                }
-                                return (
-                                    <tr key={key}>
-                                        <td>{item.title}</td>
-                                        <td>{item.id_card}</td>
-                                        <td>{item.name}</td>
-                                        <td>{formatDate(item.created_at)}</td>
-                                        <td>{formatDate(item.expired_date)}</td>
-                                        <td>{item.forfeit}</td>
-                                        <td>{item.isverify}</td>
-                                        <td>
-                                            <Link to={`/loaning/verify/${item.loaningid}`}>
-                                                <button className="btn btn-success" disabled={item ? item.isverify === "true" : "false"} onClick={() => { this.updateLoan(item.loaningid, data) }}>Verify</button>
-                                            </Link></td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </table>
-                </div>
+                            </table>
+                        </div>
+                        :
+                        <div className="container mt-5 center">
+                            <h6>Oops Something Wrong With you! :v</h6>
+                        </div>
+                }
             </div>
         )
     }
