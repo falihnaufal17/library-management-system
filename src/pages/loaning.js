@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import ModalLoan from '../components/modalAdminLoan';
 let getToken = localStorage.token
 let iduser = localStorage.number
-let localdata = localStorage.getItem('data') || ''
+let localdata = JSON.parse(localStorage.getItem('data') || '')
 class Loaning extends Component {
     constructor(props) {
         super(props)

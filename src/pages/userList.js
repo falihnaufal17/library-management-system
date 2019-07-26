@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 let getToken = localStorage.token
 let iduser = localStorage.number
-let localdata = localStorage.getItem('data') || ''
+let localdata = JSON.parse(localStorage.getItem('data') || '')
 class UserList extends Component {
     constructor(props) {
         super(props)
