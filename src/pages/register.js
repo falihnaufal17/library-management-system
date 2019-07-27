@@ -37,21 +37,27 @@ class Register extends Component {
                 password: '',
             })
         } else {
-            await this.props.dispatch(register(data))
-
-            await Swal.fire({
-                title: 'Register User',
-                type: 'success',
-                text: 'Registration Successfully!'
+            await this.props.dispatch(register(data)).then(() => {
+                Swal.fire({
+                    title: 'Register User',
+                    type: 'success',
+                    text: 'Registration Successfully!'
+                })
+                this.setState({
+                    users: this.props.user,
+                    id_card: '',
+                    name: '',
+                    email: '',
+                    password: '',
+                })
             })
-
-            this.setState({
-                users: this.props.user,
-                id_card: '',
-                name: '',
-                email: '',
-                password: '',
-            })
+                .catch(() => {
+                    Swal.fire({
+                        title: 'Registration Failed',
+                        type: 'warning',
+                        text: 'Email sudah terdaftar!'
+                    })
+                })
         }
 
     }
