@@ -19,6 +19,7 @@ class Navigation extends Component {
         this.setState({
             users: this.props.user
         })
+        window.location.href = "/"
     }
 
     render() {

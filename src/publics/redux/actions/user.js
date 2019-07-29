@@ -1,15 +1,9 @@
 import axios from 'axios'
 
-export const getUsers = (token, iduser) => {
+export const getUsers = () => {
     return {
         type: 'GET_USER',
-        payload: axios.get(`http://localhost:2000/users`, {
-            headers: {
-                'authorization': 'x-control-app',
-                'x-access-token': token,
-                'x-control-user': iduser
-            }
-        })
+        payload: axios.get(`http://localhost:2000/users`)
     }
 }
 

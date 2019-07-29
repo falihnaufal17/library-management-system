@@ -4,7 +4,6 @@ import { historyLoan } from '../../publics/redux/actions/loan'
 import { getBooks } from '../../publics/redux/actions/book'
 import { connect } from 'react-redux'
 import { Card } from 'react-bootstrap';
-let getToken = localStorage.token
 let iduser = localStorage.number
 const localdata = JSON.parse(localStorage.getItem('data')) || ''
 class History extends Component {
@@ -21,7 +20,7 @@ class History extends Component {
     }
 
     componentDidMount = async () => {
-        await this.props.dispatch(historyLoan(getToken, iduser))
+        await this.props.dispatch(historyLoan(iduser))
         await this.props.dispatch(getBooks())
         this.setState({
             loans: this.props.loan,

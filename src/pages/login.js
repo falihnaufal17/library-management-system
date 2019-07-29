@@ -50,6 +50,7 @@ class Login extends Component {
             email: '',
             password: '',
         })
+        window.location.href = '/'
     }
 
     handleInputChange(e) {
@@ -87,9 +88,7 @@ class Login extends Component {
                                 <Form.Label>Password:</Form.Label>
                                 <Form.Control type="password" placeholder="Password..." name="password" value={password} onChange={this.handleInputChange} />
                             </Form.Group>
-                            <Button variant="success" onClick={() => {
-                                this.login(data)
-                            }}>
+                            <Button variant="success" onClick={() => { this.login(data) }}>
                                 Login!
                             </Button>
                         </Form>

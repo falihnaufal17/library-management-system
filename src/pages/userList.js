@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { getUsers, verifyUser } from '../publics/redux/actions/user';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-let getToken = localStorage.token
-let iduser = localStorage.number
-let localdata = JSON.parse(localStorage.getItem('data') || '')
+let localdata = JSON.parse(localStorage.getItem('data')) || ''
 class UserList extends Component {
     constructor(props) {
         super(props)
@@ -16,7 +14,7 @@ class UserList extends Component {
     }
 
     componentDidMount = async () => {
-        await this.props.dispatch(getUsers(getToken, iduser))
+        await this.props.dispatch(getUsers())
         this.setState({
             users: this.props.user
         })

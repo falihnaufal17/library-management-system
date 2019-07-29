@@ -54,20 +54,33 @@ class ModalForm extends Component {
             })
         } else {
             await this.props.dispatch(postBook(title, writer, image, description, locationid, categoryid, statusid))
-
-            await swal.fire({
-                title: 'Add Book',
-                type: 'success',
-                text: 'Data added successfully!',
-            })
-
-            this.setState({
-                books: this.props.book,
-                title: '',
-                writer: '',
-                image: '',
-                description: ''
-            })
+                .then(() => {
+                    swal.fire({
+                        title: 'Add Book',
+                        type: 'success',
+                        text: 'Data added successfully!',
+                    })
+                    this.setState({
+                        books: this.props.book,
+                        title: '',
+                        writer: '',
+                        image: '',
+                        description: ''
+                    })
+                })
+                .catch(() => {
+                    swal.fire({
+                        title: 'Add Book Failed',
+                        type: 'warning',
+                        text: 'Title does exist!',
+                    })
+                    this.setState({
+                        title: '',
+                        writer: '',
+                        image: '',
+                        description: ''
+                    })
+                })
         }
 
     }

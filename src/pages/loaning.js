@@ -7,9 +7,7 @@ import { getBooks } from '../publics/redux/actions/book'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2';
 import ModalLoan from '../components/modalAdminLoan';
-let getToken = localStorage.token
-let iduser = localStorage.number
-let localdata = JSON.parse(localStorage.getItem('data') || '')
+let localdata = JSON.parse(localStorage.getItem('data')) || ''
 class Loaning extends Component {
     constructor(props) {
         super(props)
@@ -27,7 +25,7 @@ class Loaning extends Component {
     }
 
     componentDidMount = async () => {
-        await this.props.dispatch(getLoan(getToken, iduser))
+        await this.props.dispatch(getLoan())
         await this.props.dispatch(getBooks())
         this.setState({
             loans: this.props.loan,
@@ -46,6 +44,8 @@ class Loaning extends Component {
             title: 'Verify Loan',
             text: 'Book returned success!'
         })
+
+        window.history.href = '/loaning'
     }
 
     render() {
@@ -132,9 +132,8 @@ class Loaning extends Component {
                                                 <td>{item.forfeit}</td>
                                                 <td>{item.isverify}</td>
                                                 <td>
-                                                    <Link to={`/loaning/verify/${item.loaningid}`}>
-                                                        <button className="btn btn-success" disabled={item ? item.isverify === "true" : "false"} onClick={() => { this.updateLoan(item.loaningid, data) }}>Verify</button>
-                                                    </Link></td>
+                                                    <button className="btn btn-success" disabled={item ? item.isverify === "true" : "false"} onClick={() => { this.updateLoan(item.loaningid, data) }}>Verify</button>
+                                                </td>
                                             </tr>
                                         )
                                     })
