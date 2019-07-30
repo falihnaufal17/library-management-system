@@ -11,7 +11,9 @@ export const getBooks = () => {
     console.log()
     return {
         type: 'GET_BOOK',
-        payload: axios.get(`https://api-libraryku.herokuapp.com/books`)
+        payload: axios.get(`https://api-libraryku.herokuapp.com/books`, {
+            headers: 'x-control-app'
+        })
     }
 }
 
