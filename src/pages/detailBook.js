@@ -154,6 +154,16 @@ class DetailBook extends Component {
             }
         }
 
+        function validateText(str) {
+            var tarea = str;
+            if (tarea.indexOf("http://") == 0 || tarea.indexOf("https://") == 0) {
+                // do something here
+                return false
+            } else {
+                return true
+            }
+        }
+
         console.log(typeof list)
 
         let modalClose = () => this.setState({
@@ -169,7 +179,7 @@ class DetailBook extends Component {
                     left: '0px',
                     top: '0px',
 
-                    backgroundImage: `url(${list ? list.image : ''})`,
+                    backgroundImage: `url(${validateText(list ? list.image : '') ? `https://api-libraryku.herokuapp.com/${list ? list.image : ''}` : list ? list.image : ''})`,
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover'
                 }}>
@@ -206,7 +216,7 @@ class DetailBook extends Component {
                         left: '1100px',
                         top: '253px',
 
-                        background: `url(${list ? list.image : ''})`,
+                        background: `url(${validateText(list ? list.image : '') ? `https://api-libraryku.herokuapp.com/${list ? list.image : ''}` : list ? list.image : ''})`,
                         boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.25)',
                         borderRadius: '15px',
                         backgroundRepeat: 'no-repeat',

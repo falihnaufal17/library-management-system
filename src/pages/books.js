@@ -119,6 +119,15 @@ class Books extends Component {
             height: '200px',
             borderRadius: '15px'
         }
+        function validateText(str) {
+            var tarea = str;
+            if (tarea.indexOf("http://") == 0 || tarea.indexOf("https://") == 0) {
+                // do something here
+                return false
+            } else {
+                return true
+            }
+        }
         return (
 
             <div style={container}>
@@ -154,7 +163,7 @@ class Books extends Component {
                                 return (
                                     <Link to={`/bookdetail/${item.bookid}`} key={index}>
                                         <div style={card}>
-                                            <img src={item.image} style={cardImage} alt="hey" />
+                                            <img src={validateText(item.image) ? `https://api-libraryku.herokuapp.com/${item.image}` : item.image} style={cardImage} alt="hey" />
                                             <div style={cardContainer}>
                                                 <h5>{text(item.title)}</h5>
                                             </div>
@@ -168,7 +177,7 @@ class Books extends Component {
                                 return (
                                     <Link to={`/bookdetail/${item.bookid}`} key={index}>
                                         <div style={card}>
-                                            <img src={item.image} style={cardImage} alt="hey" />
+                                            <img src={validateText(item.image) ? `https://api-libraryku.herokuapp.com/${item.image}` : item.image} style={cardImage} alt="hey" />
                                             <div style={cardContainer}>
                                                 <h5>{text(item.title)}</h5>
                                             </div>
