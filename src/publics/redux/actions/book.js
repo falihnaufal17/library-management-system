@@ -23,14 +23,10 @@ export const searchBook = (search) => {
     }
 }
 
-export const postBook = (title, writer, image, description, locationid, categoryid, statusid) => {
-    console.log("desc: " + description)
-    console.log("locationid " + locationid)
-    console.log("categoryid: " + categoryid)
-    console.log("statusid: " + statusid)
+export const postBook = (data) => {
     return {
         type: 'POST_BOOK',
-        payload: axios.post('https://api-libraryku.herokuapp.com/books', { title: title, writer: writer, image: image, description: description, locationid: locationid, categoryid: categoryid, statusid: statusid })
+        payload: axios.post('https://api-libraryku.herokuapp.com/books', data)
     }
 }
 

@@ -32,6 +32,7 @@ class ModalForm extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.onChangeFile = this.onChangeFile.bind(this)
     }
 
     componentDidMount = async () => {
@@ -45,7 +46,16 @@ class ModalForm extends Component {
         })
     }
 
-    addBook = async (title, writer, image, description, locationid, categoryid, statusid) => {
+    onChangeFile = (e) => {
+        console.log(e.target.files[0])
+        this.setState({
+            image: e.target.files[0],
+            loaded: 0,
+        })
+    }
+
+    addBook = async (event) => {
+        event.preventDefault()
         if (this.state.title === '' || this.state.writer === '' || this.state.image === '' || this.state.description === '') {
             swal.fire({
                 title: 'Add Book Failed',
@@ -53,7 +63,19 @@ class ModalForm extends Component {
                 text: 'Failed add data, please fill the blank form correctly!'
             })
         } else {
-            await this.props.dispatch(postBook(title, writer, image, description, locationid, categoryid, statusid))
+            let formdata = new FormData()
+            formdata.append('title', this.state.title)
+            formdata.append('writer', this.state.writer)
+            formdata.append('image', this.state.image)
+
+            console.log("IMAGENYA: ", this.state.image)
+            formdata.append('description', this.state.description)
+            formdata.append('locationid', this.state.locationid)
+            formdata.append('categoryid', this.state.categoryid)
+            formdata.append('statusid', this.state.statusid)
+            formdata.append('created_at', Date.now())
+            formdata.append('updated_at', Date.now())
+            await this.props.dispatch(postBook(formdata))
                 .then(() => {
                     swal.fire({
                         title: 'Add Book',
@@ -64,7 +86,6 @@ class ModalForm extends Component {
                         books: this.props.book,
                         title: '',
                         writer: '',
-                        image: '',
                         description: ''
                     })
                 })
@@ -77,7 +98,6 @@ class ModalForm extends Component {
                     this.setState({
                         title: '',
                         writer: '',
-                        image: '',
                         description: ''
                     })
                 })
@@ -95,7 +115,7 @@ class ModalForm extends Component {
     }
 
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setState({ image: event.target.files[0] });
     }
 
     render() {
@@ -103,7 +123,19 @@ class ModalForm extends Component {
         const cat = categories.categoryList
         const loc = locations.locationList
         const stat = statuss.statusList
-        console.log(cat, loc, stat)
+        console.log(cat, loc, stat, image)
+
+        let data = {
+            title: title,
+            writer: writer,
+            image: image,
+            description: description,
+            locationid: locationid,
+            categoryid: categoryid,
+            statusid: statusid,
+            created_at: Date.now(),
+            update_at: Date.now()
+        }
 
         console.log(this.state.description)
         return (
@@ -136,7 +168,7 @@ class ModalForm extends Component {
                         <Form.Group as={Row} controlId="formUrlImage">
                             <Form.Label column sm="2">Url Image</Form.Label>
                             <Col sm="10">
-                                <Form.Control name="image" placeholder="Url Image..." onChange={this.handleInputChange} value={image} />
+                                <Form.Control type="file" name="image" onChange={this.onChangeFile} />
                             </Col>
                         </Form.Group>
 
@@ -196,9 +228,7 @@ class ModalForm extends Component {
                             <Button style={{
                                 backgroundColor: '#F4CF5D', float: 'right', border: 'none', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)', width: '90px',
                                 height: '40px',
-                            }} onClick={() => {
-                                this.addBook(this.state.title, this.state.writer, this.state.image, this.state.description, this.state.locationid, this.state.categoryid, this.state.statusid)
-                            }}>
+                            }} onClick={this.addBook}>
                                 Save
                         </Button>
                         </Link>
