@@ -35,17 +35,16 @@ class Loaning extends Component {
 
     updateLoan = async (loaningid, data) => {
         await this.props.dispatch(updateLoan(loaningid, data))
-        this.setState({
-            loans: this.props.loan
-        })
-
-        Swal.fire({
-            type: 'success',
-            title: 'Verify Loan',
-            text: 'Book returned success!'
-        })
-
-        window.history.href = '/loaning'
+            .then(() => {
+                this.setState({
+                    loans: this.props.loan
+                })
+                Swal.fire({
+                    type: 'success',
+                    title: 'Verify Loan',
+                    text: 'Book returned success!'
+                })
+            })
     }
 
     render() {
