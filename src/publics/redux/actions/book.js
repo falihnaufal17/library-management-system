@@ -7,11 +7,11 @@ export const getBookByStatus = () => {
     }
 }
 
-export const getBooks = () => {
+export const getBooks = (page) => {
     console.log()
     return {
         type: 'GET_BOOK',
-        payload: axios.get(`https://api-libraryku.herokuapp.com/books`)
+        payload: axios.get(`https://api-libraryku.herokuapp.com/books?page=${page}`)
     }
 }
 

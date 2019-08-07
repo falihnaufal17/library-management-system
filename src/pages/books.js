@@ -15,7 +15,8 @@ class Books extends Component {
             modalShow: false,
             books: [],
             resultSearch: [],
-            search: ''
+            search: '',
+            page: 1
         };
 
         this.searchBook = this.searchBook.bind(this)
@@ -24,7 +25,7 @@ class Books extends Component {
 
     componentDidMount = async () => {
 
-        await this.props.dispatch(getBooks())
+        await this.props.dispatch(getBooks(this.state.page))
         this.setState({
             books: this.props.book
         })
@@ -35,6 +36,24 @@ class Books extends Component {
         this.setState({
             resultSearch: this.props.book
         })
+    }
+
+    nextPage = async () => {
+        await this.props.dispatch(getBooks(this.state.page + 1))
+            .then(() => {
+                this.setState({
+                    books: this.props.book
+                })
+            })
+    }
+
+    prevPage = async () => {
+        await this.props.dispatch(getBooks(this.state.page - 1))
+            .then(() => {
+                this.setState({
+                    books: this.props.book
+                })
+            })
     }
 
     render() {
@@ -136,18 +155,8 @@ class Books extends Component {
                         this.setState({ search: e.target.value })
                     }} />
                 </form>
-                {
-                    localdata.namerole === 'admin'
-                        ?
-                        <button style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
-                        :
-                        localdata.namerole === 'user'
-                            ?
-                            <button disabled style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
-                            :
-                            ''
-                }
 
+                <button style={btnAdd} onClick={() => this.setState({ modalShow: true })}>ADD</button>
 
                 <ModalForm
                     show={this.state.modalShow}
@@ -186,6 +195,10 @@ class Books extends Component {
                                 )
                             })
                     }
+                </div>
+                <div>
+                    <button className='btn btn-primary' onClick={() => { this.prevPage() }}>Prev</button>
+                    <button className='btn btn-primary' onClick={() => { this.nextPage() }}>Next</button>
                 </div>
             </div>
         )

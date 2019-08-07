@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { getUsers, verifyUser } from '../publics/redux/actions/user';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 let localdata = JSON.parse(localStorage.getItem('data')) || ''
 class UserList extends Component {
     constructor(props) {
@@ -22,9 +23,22 @@ class UserList extends Component {
 
     verifyUser = async (userid, data) => {
         await this.props.dispatch(verifyUser(userid, data))
-        this.setState({
-            users: this.props.user
-        })
+            .then(() => {
+                Swal.fire({
+                    type: 'success',
+                    title: 'Verify Successfully',
+                })
+                this.setState({
+                    users: this.props.user
+                })
+            })
+            .catch(()=>{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Verify Failed',
+                    text: 'Oops Something wrong with server :('
+                })
+            })
     }
 
     render() {
@@ -69,7 +83,7 @@ class UserList extends Component {
                                                             : <div className="badge badge-secondary">Offline</div>}</td>
                                                         <td>{item.namerole}</td>
                                                         <td>{item.isverify}</td>
-                                                        <td><Button href={'/userlist'} onClick={() => {
+                                                        <td><Button onClick={() => {
                                                             this.verifyUser(item.iduser, data)
                                                         }} className="btn btn-sm btn-success" disabled={item ? item.isverify === 'true' : 'false'}>Verify</Button></td>
                                                     </tr>
