@@ -49,7 +49,7 @@ The purpose of this application is for people to borrow books online and easily
 </div>
 
 ## Release Web
-[![Netlify Status](https://api.netlify.com/api/v1/badges/85e33a03-d82a-4947-8b71-f38561c69149/deploy-status)](https://app.netlify.com/sites/libraryku/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/85e33a03-d82a-4947-8b71-f38561c69149/deploy-status)](https://libraryku.netlify.com/)
 
 ## Contributors
 <center>
